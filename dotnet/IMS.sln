@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Showcase", "Showcase", "{118E161A-741C-4F15-8F72-77B7C22EC9BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityManagement.Connector", "src\Connector\IdentityManagement.Connector.csproj", "{83557367-5CD0-427F-A08E-9B9CE13DD9A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityManagement.Contract", "src\Contract\IdentityManagement.Contract.csproj", "{44E3CACD-E0B9-4EA8-9BD9-42FF70C3D9AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "(Modeling)", "src\EDMX\(Modeling).csproj", "{F66DE0E0-4F05-4B96-A182-605EA0BD7F3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityManagement.ShowcaseService", "src\ShowcaseService\IdentityManagement.ShowcaseService.csproj", "{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityManagement.ShowcaseService.WebAPI", "src\ShowcaseService.WebAPI\IdentityManagement.ShowcaseService.WebAPI.csproj", "{7861AE44-DB5D-448E-8F63-3E380F9656D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "(Solution Items)", "(Solution Items)", "{A7CB3963-D57E-4F10-AAC1-74148C39324D}"
+	ProjectSection(SolutionItems) = preProject
+		..\vers\changelog.md = ..\vers\changelog.md
+		ORSCF.IdentityManagement.Contract.nuspec = ORSCF.IdentityManagement.Contract.nuspec
+		..\readme.md = ..\readme.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83557367-5CD0-427F-A08E-9B9CE13DD9A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83557367-5CD0-427F-A08E-9B9CE13DD9A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83557367-5CD0-427F-A08E-9B9CE13DD9A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83557367-5CD0-427F-A08E-9B9CE13DD9A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E3CACD-E0B9-4EA8-9BD9-42FF70C3D9AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E3CACD-E0B9-4EA8-9BD9-42FF70C3D9AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E3CACD-E0B9-4EA8-9BD9-42FF70C3D9AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E3CACD-E0B9-4EA8-9BD9-42FF70C3D9AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F66DE0E0-4F05-4B96-A182-605EA0BD7F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F66DE0E0-4F05-4B96-A182-605EA0BD7F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F66DE0E0-4F05-4B96-A182-605EA0BD7F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F66DE0E0-4F05-4B96-A182-605EA0BD7F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7861AE44-DB5D-448E-8F63-3E380F9656D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7861AE44-DB5D-448E-8F63-3E380F9656D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7861AE44-DB5D-448E-8F63-3E380F9656D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7861AE44-DB5D-448E-8F63-3E380F9656D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8F1A8F0-D513-4788-96A7-BE2F146C5FBC} = {118E161A-741C-4F15-8F72-77B7C22EC9BE}
+		{7861AE44-DB5D-448E-8F63-3E380F9656D9} = {118E161A-741C-4F15-8F72-77B7C22EC9BE}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {174839FD-71CD-40F0-9F70-CAE01B1C345A}
+	EndGlobalSection
+EndGlobal
