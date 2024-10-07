@@ -13,9 +13,9 @@ namespace MedicalResearch.IdentityManagement {
 
   partial class ApiService : IPseudonymizationService {
 
-    public bool GetOrCreatePseudonym(string givenName, string familyName, string birthDate, Dictionary<string, string> extendedFields, out string pseudonym, out bool wasCreatedNewly) {
+    public bool GetOrCreatePseudonym(string givenName, string familyName, string birthDate, string[] pseudonymKindsToReturn, Dictionary<string, string> extendedFields, out Pseudonym[] pseudonyms, out bool wasCreatedNewly) {
 
-      if (this.GetExisitingPseudonym( givenName, familyName, birthDate, extendedFields, out pseudonym)) {
+      if (this.GetExisitingPseudonym( givenName, familyName, birthDate, pseudonymKindsToReturn, extendedFields, out pseudonyms)) {
         wasCreatedNewly = false;
         return true;
       }
@@ -37,11 +37,11 @@ namespace MedicalResearch.IdentityManagement {
             StudyWorkflowVersion = "",
             ParticipantIdentifierSemantic = "generated Pseudonym"
           };
-          if (!AccessControlContext.Current.ValidateEntityScope(study)) {
-            wasCreatedNewly = false;
-            pseudonym = null;
-            return false;
-          }
+          //if (!AccessControlContext.Current.ValidateEntityScope(study)) {
+          //  wasCreatedNewly = false;
+          //  pseudonyms = null;
+          //  return false;
+          //}
           db.StudyScopes.Add(study);
         }
 
@@ -56,11 +56,11 @@ namespace MedicalResearch.IdentityManagement {
             ResearchStudyUid = Guid.Empty,
             SiteUid = Guid.Empty
           };
-          if (!AccessControlContext.Current.ValidateEntityScope(execution)) {
-            wasCreatedNewly = false;
-            pseudonym = null;
-            return false;
-          }
+          //if (!AccessControlContext.Current.ValidateEntityScope(execution)) {
+          //  wasCreatedNewly = false;
+          //  pseudonyms = null;
+          //  return false;
+          //}
           db.StudyExecutionScopes.Add(execution);
         }
 
@@ -94,19 +94,19 @@ namespace MedicalResearch.IdentityManagement {
         try {
           db.SaveChanges();
           wasCreatedNewly = true;
-          pseudonym = generatedPseudonym;
+          pseudonyms = new Pseudonym[] { new Pseudonym { Identifier = generatedPseudonym, Kind = "primary" } };
           return true;
         }
         catch (Exception ex) {
           wasCreatedNewly = false;
-          pseudonym = null;
+          pseudonyms = null;
           return false;
         }
 
       };
     }
 
-    public bool GetExisitingPseudonym(string givenName, string familyName, string birthDate, Dictionary<string, string> extendedFields, out string pseudonym) {
+    public bool GetExisitingPseudonym(string givenName, string familyName, string birthDate, string[] pseudonymKindsToReturn, Dictionary<string, string> extendedFields, out Pseudonym[] pseudonyms) {
 
       var parsedBirthDate = DateTime.Parse(birthDate);
 
@@ -124,17 +124,18 @@ namespace MedicalResearch.IdentityManagement {
         ).SingleOrDefault();
 
         if (string.IsNullOrWhiteSpace(participantIdentifier)) {
-          pseudonym = null;
+          pseudonyms = null;
           return false;
         }
         else {
-          pseudonym = participantIdentifier;
+          pseudonyms = new Pseudonym[] { new Pseudonym { Identifier=participantIdentifier, Kind= "primary" } };
           return true;
         }
 
       };
 
     }
+
   }
 
 }

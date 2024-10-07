@@ -1,0 +1,261 @@
+<#@ template language="C#" debug="false" hostspecific="true"#>
+<#@ assembly name="Newtonsoft.Json" #>
+<#@ assembly name="System.Core"#>
+<#@ import namespace="System" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="Newtonsoft.Json" #>
+<#@ output extension=".Generated.cs"#><#
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                           //
+//     Copyright: Tobias Korn / version: 31.07.2021                                          //
+//                                                                                           //
+//     this template is open source (under Apache-2 license) and originated here:            //
+//     https://github.com/KornSW/EntityFrameworkCore.ModelFirst                              //
+//                                                                                           //
+//     this notice MUST NOT be removed or modified!!!!                                       //
+//                                                                                           //
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+       //CONFIGURATION:
+
+       const string inputFile = "..\\EDMX\\ORSCF-IdentityManagement.Schema.json";
+
+       const bool onlyRootPrincipals = false;
+
+       const string outputNamespace       = "MedicalResearch.IdentityManagement.StoreAccess";
+       const string repoClassNamePattern  = "{E}Store";
+       const string interfaceNamePattern  = "I{E}Store";
+       const string itemClassNamePattern  = "{E}";
+       const string itemEntityNamePattern = "MedicalResearch.IdentityManagement.Persistence.{E}Entity";
+       const string dbContextName         = "MedicalResearch.IdentityManagement.Persistence.EF.IdentityManagementDbContext";
+
+
+       const string removalActionName = "Delete";
+#>
+using MedicalResearch.IdentityManagement.Model;
+<#
+///////////////////////////////////////////////////////////////////////////////////////////////
+// NO EDITS BELOW THIS LINE!!!
+
+string rawSchema = File.ReadAllText(Host.ResolvePath(inputFile), System.Text.Encoding.Default);
+SchemaRoot schema = JsonConvert.DeserializeObject<SchemaRoot>(rawSchema);
+
+#>
+using System;
+using System.Data.Fuse;
+using System.Data.Fuse.Convenience;
+using System.Data.Fuse.Ef;
+<#
+
+if(!String.IsNullOrWhiteSpace(outputNamespace)) {
+#>
+
+namespace <#=outputNamespace#> {
+<#
+}
+
+foreach (EntitySchema entity in schema.Entities) {
+
+  EntitySchema baseEntity = entity;
+  while (!String.IsNullOrWhiteSpace(baseEntity.InheritedEntityName)){
+    baseEntity = schema.Entities.Where(e => e.Name == baseEntity.InheritedEntityName).Single();
+  }
+
+  String ressolvedItemName = itemClassNamePattern.Replace("{E}", entity.Name);
+
+  Dictionary<String, List<String>> attributesPerField = new Dictionary<String, List<String>>();
+  foreach (FieldSchema field in entity.Fields) {
+    attributesPerField[field.Name] = new List<String>();
+  }
+
+  // PRIMARY-KEY
+  String pkFieldType= "";
+  String pkFieldTypeNullable = "";
+  String pkCompositeTypeDeclaration= "";
+  String pkParamName = "";
+  String pkFieldSummary = "";
+  String pkNameInSignaure = "";
+  bool hasPrincipal = schema.Relations.Where((r)=> !r.IsLookupRelation && r.ForeignEntityName == entity.Name).Any();
+
+  foreach (IndexSchema idx in baseEntity.Indices) {
+    if(idx.Name == baseEntity.PrimaryKeyIndexName){
+      if(idx.MemberFieldNames.Length > 1){
+
+        pkFieldType = baseEntity.Name + "Identity";
+        pkNameInSignaure = pkFieldType;
+        pkFieldSummary = "Composite Key, which represents the primary identity of a " + ressolvedItemName;
+        pkCompositeTypeDeclaration = "\n\n/// <summary> " + pkFieldSummary + " </summary>\npublic class " + pkFieldType + " {\n";
+        pkParamName = Ftl(pkFieldType);
+
+        foreach (String mfn in idx.MemberFieldNames) {
+          FieldSchema mf = baseEntity.Fields.Where((f)=> f.Name.Equals(mfn)).Single();
+          if(!String.IsNullOrWhiteSpace(mf.Summary)){
+            pkCompositeTypeDeclaration = pkCompositeTypeDeclaration + "  /// <summary> " + mf.Summary + " </summary>\n";
+          }
+          pkCompositeTypeDeclaration = pkCompositeTypeDeclaration + "  public " + mf.Type + " " + Escape(mf.Name) + ";\n";
+        }
+
+        pkCompositeTypeDeclaration = pkCompositeTypeDeclaration + "}";
+        //ref-types are always nullable
+        pkFieldTypeNullable = pkFieldType;
+      }
+      else{
+        FieldSchema mf = baseEntity.Fields.Where((f)=>f.Name.Equals(idx.MemberFieldNames[0])).Single();
+        pkNameInSignaure = Escape(mf.Name);
+        pkFieldSummary = mf.Summary;
+        if(String.IsNullOrWhiteSpace(pkFieldSummary)){
+          pkFieldSummary = "Represents the primary identity of a " + ressolvedItemName;
+        }
+        pkParamName = Ftl(mf.Name);
+        pkFieldType = mf.Type;
+        pkCompositeTypeDeclaration = "";
+
+        if(pkFieldType.ToLower().Equals("string")){
+          pkFieldTypeNullable = pkFieldType;
+        }
+        else {
+          pkFieldTypeNullable = pkFieldType + "?";
+        }
+
+      }
+    }
+  }
+
+  String entitySummary = entity.Summary;
+  if(!String.IsNullOrWhiteSpace(entitySummary)){
+    entitySummary = "/// <summary> " + entitySummary.Trim().Replace("\n", "\n/// ") + " </summary>\n";
+  }
+
+  if(!onlyRootPrincipals || !hasPrincipal){
+#>
+
+  /// <summary> Provides CRUD access to stored <#=entity.NamePlural#> (based on schema version '<#=schema.SemanticVersion #>') </summary>
+  public class <#=repoClassNamePattern.Replace("{E}", entity.Name).Replace("{P}", entity.NamePlural)#> : ModelVsEntityRepository<<#= itemClassNamePattern.Replace("{E}", entity.Name) #>, <#= itemEntityNamePattern.Replace("{E}", entity.Name) #>, <#= pkFieldType #>>, <#=interfaceNamePattern.Replace("{E}", entity.Name).Replace("{P}", entity.NamePlural)#> {
+
+    private static EfRepository<<#= itemEntityNamePattern.Replace("{E}", entity.Name) #>, <#= pkFieldType #>> CreateInnerEfRepo() {
+      var context = new <#= dbContextName #>();
+      return new EfRepository<<#= itemEntityNamePattern.Replace("{E}", entity.Name) #>, <#= pkFieldType #>>(context);
+    }
+
+    public <#=repoClassNamePattern.Replace("{E}", entity.Name).Replace("{P}", entity.NamePlural)#>() : base(
+      CreateInnerEfRepo(), new ModelVsEntityParams<<#= itemClassNamePattern.Replace("{E}", entity.Name) #>, <#= itemEntityNamePattern.Replace("{E}", entity.Name) #>>()
+    ) {
+    }
+
+  }
+<#
+
+  }//root-principal filter
+
+}// entity-loop
+
+if(!String.IsNullOrWhiteSpace(outputNamespace)) {
+#>
+
+}
+<#
+}
+
+#><#+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//     GENERATOR-CODE                                                                        //
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+string Escape(object input){  
+  if(input == null){
+    return "";
+  }
+  string s = input.ToString();
+  String[] compilerSensitveWords = new  String[]{"class", "object"};
+  if (compilerSensitveWords.Contains(s)){
+    return "@" + s;
+  }
+  return s;
+}
+
+string Ftl(string input){  
+  if(Char.IsUpper(input[0])){
+    return Char.ToLower(input[0]).ToString() + input.Substring(1, input.Length - 1);
+  }
+  return input;
+}
+
+class SchemaRoot{
+
+  public string DescriptionFormat = "";
+
+  public string TimestampUtc = "";
+  public string SemanticVersion = "";
+
+  public EntitySchema[] Entities = {};
+
+  public RelationSchema[] Relations = {};
+
+}
+
+class EntitySchema{
+
+  public string Name = "";
+  public string NamePlural = "";
+  public string InheritedEntityName = null;
+  public string Summary = "";
+
+  public bool IsBlEntrypoint = false;
+
+  public string PrimaryKeyIndexName = "";
+  public IndexSchema[] Indices = {};
+
+  public FieldSchema[] Fields = {};
+
+}
+
+class FieldSchema{
+
+  public string Name = "";
+  public string Type = "";
+  public int MaxLength = 0;
+
+  public string Summary = "";
+  public bool SystemInternal = false;
+  public bool FixedAfterCreation = false;
+
+  public bool Required = true;
+  public string DefaultValue = null;
+  public bool DbGeneratedIdentity = false;
+
+}
+
+class IndexSchema{
+
+  public string Name = "";
+  public bool Unique = false;
+  public string[] MemberFieldNames = {};
+
+}
+
+class RelationSchema{
+
+  public string Name = "";
+
+  public string PrimaryEntityName = "";
+  public string ForeignEntityName = "";
+  public string ForeignKeyIndexName = "";
+
+  public bool IsLookupRelation = true;
+  public bool PrimaryEntityIsOptional = false;
+  public bool ForeignEntityIsMultiple = true;
+
+  public string PrimaryNavigationName = "";
+  public string ForeignNavigationName = "";
+  public string PrimaryNavigationSummary = "";
+  public string ForeignNavigationSummary = "";
+
+  public bool CascadeDelete = false;
+
+}
+
+#>

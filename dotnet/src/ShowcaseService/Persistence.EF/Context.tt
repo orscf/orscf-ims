@@ -23,7 +23,7 @@ using Microsoft.EntityFrameworkCore;
 
        //CONFIGURATION:
 
-       const string inputFile               = "..\\..\\..\\..\\..\\orscf-modeling\\EDMX\\IdentityManagement\\ORSCF-IdentityManagement.Schema.json";
+       const string inputFile               = "..\\..\\EDMX\\ORSCF-IdentityManagement.Schema.json";
 
        const string outputNamespace         = "MedicalResearch.IdentityManagement.Persistence.EF";
        const string entityClassNamePattern  = "{E}Entity";

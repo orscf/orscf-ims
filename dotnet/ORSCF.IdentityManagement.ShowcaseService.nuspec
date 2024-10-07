@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ORSCF.IdentityManagement.ShowcaseService</id>
+    <version>999.0.0-localbuild</version>
+    <title>ORSCF - IdentityManagement ShowcaseService</title>
+    <authors>ORSCF.org</authors>
+    <owners>ORSCF.org</owners>
+    <copyright>ORSCF.org</copyright>
+    <description>basic domain model of the Open Research Study Communication Format</description>
+    <tags>Research Study Clinical Trial ORSCF</tags>
+    <!-- https://spdx.org/licenses/ -->
+    <license type="expression">Apache-2.0</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <icon>PackageIcon.png</icon>
+    <projectUrl>https://www.orscf.org</projectUrl>
+    <dependencies>
+      <group targetFramework="net6.0">
+        
+        <dependency id="ORSCF.IdentityManagement.Contract" version="999.0.0" />
+          <dependency id="FUSE-fx.EntityAnnotations" version="(4.0.3,5.0)" />
+          <dependency id="FUSE-fx.RepositoryContract" version="(0.3.12,2.0]" />
+          <dependency id="Hl7.Fhir.R4" version="[5.5.1,6.0)" />
+
+        <dependency id="UJMW.DynamicClient" version="[3.3.0,4.0)" />
+        
+        <dependency id="Microsoft.EntityFrameworkCore" version="7.0.20" />
+        <dependency id="Microsoft.EntityFrameworkCore.Design" version="7.0.20" />
+        <dependency id="Microsoft.EntityFrameworkCore.Proxies" version="7.0.20" />
+        <dependency id="Microsoft.EntityFrameworkCore.SqlServer" version="7.0.20" />
+        <dependency id="Microsoft.EntityFrameworkCore.Tools" version="7.0.20" />
+        
+        <dependency id="kornSW.EntityFrameworkCore.DataAccessFilter" version="[2.0.864,3.0)" />
+        <dependency id="FUSE-fx.EfSupport" version="[0.3.12,2.0)" />
+        <dependency id="System.Linq.Dynamic.Core" version="1.4.5" />
+
+        <dependency id="Snowflake44" version="[3.1.0,4.0)" />
+        <dependency id="SmartStandards.Essentials" version="[0.5.1,2.0)" />
+        <dependency id="SmartStandards.Logging" version="[1.2.2,2.0)" />
+        <dependency id="SmartAmbience" version="[2.1.1,3.0)" />
+
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <!-- https://docs.microsoft.com/en-us/nuget/create-packages/creating-a-package#from-a-convention-based-working-directory -->
+    <file src="PackageIcon.png" target="" />
+    <!-- .NET 6.0 -->
+    <file src="src\ShowcaseService\bin\ORSCF.IdentityManagement.Service.dll" target="lib/net6.0" />
+    <file src="src\ShowcaseService\bin\ORSCF.IdentityManagement.Service.xml" target="lib/net6.0" />
+    <file src="src\ShowcaseService\bin\ORSCF.IdentityManagement.Service.pdb" target="lib/net6.0" />
+  </files>
+</package>

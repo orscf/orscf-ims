@@ -23,16 +23,16 @@ namespace MedicalResearch.IdentityManagement.Persistence.EF {
 
   }
 
-  public static class AccessControlContextExtensions {
+  //public static class AccessControlContextExtensions {
 
-    public static bool ValidateEntityScope<TEntity>(this AccessControlContext context, TEntity entity) {
-      var filterExpression = EntityAccessControl.BuildExpressionForLocalEntity<TEntity>(context);
-      if (!filterExpression.Compile().Invoke(entity)) {
-        return false;
-      }
-      return true;
-    }
+  //  public static bool ValidateEntityScope<TEntity>(this AccessControlContext context, TEntity entity) {
+  //    var filterExpression = EntityAccessControl.BuildExpressionForLocalEntity<TEntity>(context);
+  //    if (!filterExpression.Compile().Invoke(entity)) {
+  //      return false;
+  //    }
+  //    return true;
+  //  }
 
-  }
+  //}
 
 }

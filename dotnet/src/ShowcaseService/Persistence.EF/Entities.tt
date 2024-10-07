@@ -21,7 +21,7 @@
 
        //CONFIGURATION:
 
-       const string inputFile = "..\\..\\..\\..\\..\\orscf-modeling\\EDMX\\IdentityManagement\\ORSCF-IdentityManagement.Schema.json";
+       const string inputFile = "..\\..\\EDMX\\ORSCF-IdentityManagement.Schema.json";
 
        const string outputNamespace = "MedicalResearch.IdentityManagement.Persistence";
        const string entityClassNamePattern = "{E}Entity";
@@ -30,7 +30,7 @@
        const bool generateReverseNavPropsToDependents = true;
 
        const bool generateNavPropsToLookup            = true;
-       const bool generateReverseNavPropsToReferers   = true;
+       const bool generateReverseNavPropsToReferrers   = true;
 
        const bool generateEfAttributes                = false;
        const string tablePrefix = "";
@@ -204,8 +204,8 @@ foreach (EntitySchema entity in schema.Entities) {
 
             bool generate = true;
             if(rel.IsLookupRelation){
-              attributes.Add("Referer");
-              generate = generateReverseNavPropsToReferers;
+              attributes.Add("Referrer");
+              generate = generateReverseNavPropsToReferrers;
             }
             else{
               attributes.Add("Dependent");

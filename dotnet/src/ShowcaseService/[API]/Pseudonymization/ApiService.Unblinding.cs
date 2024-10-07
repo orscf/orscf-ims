@@ -12,13 +12,15 @@ using Microsoft.EntityFrameworkCore;
 namespace MedicalResearch.IdentityManagement {
 
   partial class ApiService : IUnblindingService {
-    public int RequestUnblindingToken(string[] pseudonymsToUnblind, string requestReason, string requestBy, out string unblindingToken) {
+
+    public int RequestUnblindingToken(string[] pseudonymsToUnblind, string pseudonymKind, string requestReason, string requestBy, out string unblindingToken) {
       throw new NotImplementedException();
     }
 
-    public int TryUnblind(string unblindingToken, string[] pseudonymsToUnblind, IdentityDetails[] unblindedIdentities) {
+    public int TryUnblind(string unblindingToken, string[] pseudonymsToUnblind, string pseudonymKind, IdentityDetails[] unblindedIdentities) {
       throw new NotImplementedException();
     }
+
   }
 
 }

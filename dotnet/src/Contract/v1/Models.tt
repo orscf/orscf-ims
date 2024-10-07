@@ -10,7 +10,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                           //
-//     Copyright: Tobias Korn / version: 24.04.2021                                          //
+//     Copyright: Tobias Korn / version: 22.05.2021                                          //
 //                                                                                           //
 //     this template is open source (under Apache-2 license) and originated here:            //
 //     https://github.com/KornSW/EntityFrameworkCore.ModelFirst                              //
@@ -21,7 +21,7 @@
 
        //CONFIGURATION:
 
-       const string inputFile = "..\\..\\..\\..\\orscf-modeling\\EDMX\\IdentityManagement\\ORSCF-IdentityManagement.Schema.json";
+       const string inputFile = "..\\..\\EDMX\\ORSCF-IdentityManagement.Schema.json";
 
        const string outputNamespace = "MedicalResearch.IdentityManagement.Model";
        const string entityClassNamePattern = "{E}";

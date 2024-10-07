@@ -16,6 +16,7 @@ using MedicalResearch.IdentityManagement.StoreAccess;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.OpenApi.Writers;
 using MedicalResearch.IdentityManagement.Model;
+using System.Web.UJMW;
 
 namespace MedicalResearch.IdentityManagement.WebAPI {
 
@@ -59,15 +60,40 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
       services.AddSingleton<IUnblindingClearanceAwaiterService>(apiService);
       services.AddSingleton<IUnblindingClearanceGrantingService>(apiService);
 
+      services.AddSingleton<IAdditionalSubjectParticipationIdentifierStore>(new AdditionalSubjectParticipationIdentifierStore());
+      services.AddSingleton<ISubjectParticipationStore>(new SubjectParticipationStore());
+      services.AddSingleton<IStudyExecutionScopeStore>(new StudyExecutionScopeStore());
+      services.AddSingleton<IStudyScopeStore>(new StudyScopeStore());
+      services.AddSingleton<ISubjectAddressStore>(new SubjectAddressStore());
+      services.AddSingleton<ISubjectIdentityStore>(new SubjectIdentityStore());
+
       //...
 
-      services.AddControllers();
+      services.AddDynamicUjmwControllers(
+        (c) => {
+
+          c.AddControllerFor<IImsApiInfoService>("ims/v2/ImsApiInfo");
+          c.AddControllerFor<IAgeEvaluationService>("ims/v2/AgeEvaluation");
+          c.AddControllerFor<IPseudonymizationService>("ims/v2/Pseudonymization");
+          c.AddControllerFor<IUnblindingService>("ims/v2/Unblinding");
+          c.AddControllerFor<IUnblindingClearanceAwaiterService>("ims/v2/UnblindingClearanceAwaiter");
+          c.AddControllerFor<IUnblindingClearanceGrantingService>("ims/v2/UnblindingClearanceGranting");
+
+          c.AddControllerFor<IAdditionalSubjectParticipationIdentifierStore>("ims/v2/store/AdditionalSubjectParticipationIdentifiers");
+          c.AddControllerFor<ISubjectParticipationStore>("ims/v2/store/SubjectParticipations");
+          c.AddControllerFor<IStudyExecutionScopeStore>("ims/v2/store/StudyExecutionScopes");
+          c.AddControllerFor<IStudyScopeStore>("ims/v2/store/StudyScopes");
+          c.AddControllerFor<ISubjectAddressStore>("ims/v2/store/SubjectAddresss");
+          c.AddControllerFor<ISubjectIdentityStore>("ims/v2/store/SubjectIdentitys");
+
+        }
+      );
 
       services.AddSwaggerGen(c => {
         
         c.EnableAnnotations(true, true);
 
-        c.IncludeXmlComments(outDir + "Hl7.Fhir.R4.Core.xml", true);
+        c.IncludeXmlComments(outDir + "Hl7.Fhir.R4.xml", true);
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Contract.xml", true);
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Service.xml", true);
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Service.WebAPI.xml", true);
@@ -104,19 +130,19 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
 
         c.UseInlineDefinitionsForEnums();
 
-        c.SwaggerDoc(
-          "StoreAccessV1",
-          new OpenApiInfo {
-            Title = _ApiTitle + "-StoreAccess",
-            Version = _ApiVersion.ToString(3),
-            Description = "NOTE: This is not intended be a 'RESTful' api, as it is NOT located on the persistence layer and is therefore NOT focused on doing CRUD operations! This HTTP-based API uses a 'call-based' approach to known BL operations. IN-, OUT- and return-arguments are transmitted using request-/response- wrappers (see [UJMW](https://github.com/KornSW/UnifiedJsonMessageWrapper)), which are very lightweight and are a compromise for broad support and adaptability in REST-inspired technologies as well as soap-inspired technologies!",
-            Contact = new OpenApiContact {
-              Name = "Open Research Study Communication Format",
-              Email = "info@orscf.org",
-              Url = new Uri("https://orscf.org")
-            }
-          }
-        );
+        //c.SwaggerDoc(
+        //  "StoreAccessV1",
+        //  new OpenApiInfo {
+        //    Title = _ApiTitle + "-StoreAccess",
+        //    Version = _ApiVersion.ToString(3),
+        //    Description = "NOTE: This is not intended be a 'RESTful' api, as it is NOT located on the persistence layer and is therefore NOT focused on doing CRUD operations! This HTTP-based API uses a 'call-based' approach to known BL operations. IN-, OUT- and return-arguments are transmitted using request-/response- wrappers (see [UJMW](https://github.com/KornSW/UnifiedJsonMessageWrapper)), which are very lightweight and are a compromise for broad support and adaptability in REST-inspired technologies as well as soap-inspired technologies!",
+        //    Contact = new OpenApiContact {
+        //      Name = "Open Research Study Communication Format",
+        //      Email = "info@orscf.org",
+        //      Url = new Uri("https://orscf.org")
+        //    }
+        //  }
+        //);
 
         c.SwaggerDoc(
           "ApiV1",

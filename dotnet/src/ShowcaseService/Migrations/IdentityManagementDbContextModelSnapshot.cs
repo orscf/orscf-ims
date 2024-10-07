@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace MedicalResearch.IdentityManagement.Migrations
 {
     [DbContext(typeof(IdentityManagementDbContext))]
@@ -15,9 +17,13 @@ namespace MedicalResearch.IdentityManagement.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "7.0.20")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.AdditionalSubjectParticipationIdentifierEntity", b =>
                 {
@@ -40,7 +46,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasIndex("ParticipantIdentifier", "ResearchStudyUid");
 
-                    b.ToTable("ImsAdditionalSubjectParticipationIdentifiers");
+                    b.ToTable("ImsAdditionalSubjectParticipationIdentifiers", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.StudyExecutionScopeEntity", b =>
@@ -59,7 +65,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasIndex("ResearchStudyUid");
 
-                    b.ToTable("ImsStudyExecutionScopes");
+                    b.ToTable("ImsStudyExecutionScopes", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.StudyScopeEntity", b =>
@@ -84,7 +90,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasKey("ResearchStudyUid");
 
-                    b.ToTable("ImsStudyScopes");
+                    b.ToTable("ImsStudyScopes", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.SubjectAddressEntity", b =>
@@ -122,7 +128,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasKey("InternalRecordId");
 
-                    b.ToTable("ImsSubjectAddresses");
+                    b.ToTable("ImsSubjectAddresses", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.SubjectIdentityEntity", b =>
@@ -168,7 +174,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasIndex("ResidentAddressId");
 
-                    b.ToTable("ImsSubjectIdentities");
+                    b.ToTable("ImsSubjectIdentities", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.SubjectParticipationEntity", b =>
@@ -197,7 +203,7 @@ namespace MedicalResearch.IdentityManagement.Migrations
 
                     b.HasIndex("SubjectIdentityRecordId");
 
-                    b.ToTable("ImsSubjectParticipations");
+                    b.ToTable("ImsSubjectParticipations", (string)null);
                 });
 
             modelBuilder.Entity("MedicalResearch.IdentityManagement.Persistence.AdditionalSubjectParticipationIdentifierEntity", b =>

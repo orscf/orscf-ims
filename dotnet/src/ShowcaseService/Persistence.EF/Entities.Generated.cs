@@ -159,7 +159,7 @@ public class StudyExecutionScopeEntity {
   [Principal]
   public virtual StudyScopeEntity StudyScope { get; set; }
 
-  [Referer]
+  [Referrer]
   public virtual ObservableCollection<SubjectParticipationEntity> CreatedParticipations { get; set; } = new ObservableCollection<SubjectParticipationEntity>();
 
 #region Mapping
@@ -284,7 +284,7 @@ public class SubjectAddressEntity {
   /// <summary> *this field is optional (use null as value) </summary>
   public String PhoneNumber { get; set; }
 
-  [Referer]
+  [Referrer]
   public virtual ObservableCollection<SubjectIdentityEntity> SubjectIdentities { get; set; } = new ObservableCollection<SubjectIdentityEntity>();
 
 #region Mapping
@@ -378,7 +378,7 @@ public class SubjectIdentityEntity {
   [Lookup]
   public virtual SubjectAddressEntity ResidentAddress { get; set; }
 
-  [Referer]
+  [Referrer]
   public virtual ObservableCollection<SubjectParticipationEntity> Participations { get; set; } = new ObservableCollection<SubjectParticipationEntity>();
 
 #region Mapping

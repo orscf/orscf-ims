@@ -12,9 +12,11 @@ using Microsoft.EntityFrameworkCore;
 namespace MedicalResearch.IdentityManagement {
 
   partial class ApiService : IAgeEvaluationService {
-    public void EvaluateAge(DateTime momentOfValuation, string[] pseudonymesToEvaluate, out int[] ages) {
+
+    public void EvaluateAge(DateTime momentOfValuation, string[] pseudonymesToEvaluate, string pseudonymKind, out int[] ages) {
       throw new NotImplementedException();
     }
+
   }
 
 }
