@@ -8,7 +8,13 @@ This files contains a version history including all changes relevant for semanti
 
 ## Upcoming Changes
 
-- Starting with Gen. 2 Beta-Phase - **breaking Change** ahead!
+*(none)*
+
+
+
+## v 2.0.0
+released **2024-10-07**, including:
+ - Starting with Gen. 2 Beta-Phase - **breaking Change** ahead!
 
 
 

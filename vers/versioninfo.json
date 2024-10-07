@@ -1,0 +1,13 @@
+{
+  "currentVersion": "2.0.0",
+  "currentVersionWithSuffix": "2.0.0",
+  "releaseType": "official",
+  "previousVersion": "1.8.0",
+  "changeGrade": "major",
+  "currentMajor": 2,
+  "currentMinor": 0,
+  "currentPatch": 0,
+  "versionDateInfo": "2024-10-07",
+  "versionTimeInfo": "14:51:34",
+  "versionNotes": "- Starting with Gen. 2 Beta-Phase - breaking Change ahead!\n"
+}
