@@ -102,7 +102,7 @@ foreach (EntitySchema entity in schema.Entities) {
 
 #>
 
-<#=entitySummary#><#=tbl#>public class <#=entityClassNamePattern.Replace("{E}", entity.Name)#><#=inheritance#> {
+<#=entitySummary#><#=tbl#>public partial class <#=entityClassNamePattern.Replace("{E}", entity.Name)#><#=inheritance#> {
 <#
 
   /////////////////////////////////////////////////////////////////////////////////////////////

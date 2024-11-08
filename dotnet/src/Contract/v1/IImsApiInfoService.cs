@@ -5,10 +5,14 @@ namespace MedicalResearch.IdentityManagement {
 
   public static class ImsCapabilities {
 
-    public const string ImsApiInfo = "ImsApiInfo";
+    //public const string ImsApiInfo = "ImsApiInfo";
+
+    public const string ImsStoreAccess = "ImsStoreAccess";
+
     public const string Pseudonymization = "Pseudonymization";
     public const string AgeEvaluation = "AgeEvaluation";
     public const string Unblinding = "Unblinding";
+
     public const string UnblindingClearanceAwaiter = "UnblindingClearanceAwaiter";
     public const string UnblindingClearanceGranting = "UnblindingClearanceGranting";
 

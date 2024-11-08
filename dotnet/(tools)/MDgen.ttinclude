@@ -1,6 +1,7 @@
 <#@ assembly name="Newtonsoft.Json" #>
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Xml" #>
+<#@ assembly name="EnvDTE" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Diagnostics" #>
@@ -29,29 +30,22 @@
   String Generate(Object config) {
 
     //this value will be patched during nuget installation!!!
-    string pkgDirectory = "..\\vendor\\nuget\\KornSW.Tools.MDgen.1.0.0.455\\tools\\bin"; 
+    string pkgDirectory = ".\\vendor\\nuget\\KornSW.Tools.MDgen.1.1.3\\tools\\bin"; 
     string jsonParameterFileLocation = Path.GetTempPath();
 
     string generatorExe = Path.Combine(pkgDirectory, "MDgen.exe");
     generatorExe = generatorExe.Replace("%USERPROFILE%", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile));
     var buffer = new StringBuilder(2000);
 
-    bool notFound = false;
-    if(Path.IsPathRooted(generatorExe)){
-      if(!File.Exists(generatorExe)){
-        notFound = true;
-      }
+    if(!Path.IsPathRooted(generatorExe)){
+      var serviceProvider = this.Host as IServiceProvider;
+      var dte = serviceProvider.GetService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+      var solutionDir = Path.GetDirectoryName(dte.Solution.FileName);
+      generatorExe = Path.Combine(solutionDir, generatorExe);
     }
-    else {
-      try {
-        generatorExe = Host.ResolvePath(generatorExe);
-      }
-      catch {
-        notFound = true;
-        generatorExe = "<location-of-MDgen.ttinclude>\\" + generatorExe;
-      }
-    }
-    if(notFound){
+    
+    generatorExe = Path.GetFullPath(generatorExe);
+    if(!File.Exists(generatorExe)){
       throw new Exception("NUGET-PKG: 'KornSW.Tools.MDgen' IS NOT INSTALLED PROPERLY: '" + generatorExe + "' was not found!");
     }
 

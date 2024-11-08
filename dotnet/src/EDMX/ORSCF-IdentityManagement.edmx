@@ -303,7 +303,7 @@
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1e673f0774584ac2be5350aef5de4487" Name="Schema" ZoomLevel="80">
+      <Diagram DiagramId="1e673f0774584ac2be5350aef5de4487" Name="Schema" ZoomLevel="92">
         <EntityTypeShape EntityType="DomainModel.StudyExecutionScope" Width="2.25" PointX="1.375" PointY="3" FillColor="Maroon" />
         <EntityTypeShape EntityType="DomainModel.StudyScope" Width="2.75" PointX="4.5" PointY="1.75" FillColor="Maroon" />
         <AssociationConnector Association="DomainModel.StudyScopeStudyExecutionScope" />

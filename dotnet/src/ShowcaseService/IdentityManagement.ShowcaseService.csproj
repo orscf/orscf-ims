@@ -25,9 +25,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FUSE-fx.EfSupport" Version="0.3.16" />
+    <PackageReference Include="FUSE-fx.EfSupport" Version="0.4.7" />
     <PackageReference Include="FUSE-fx.EntityAnnotations" Version="4.0.3" />
-    <PackageReference Include="FUSE-fx.RepositoryContract" Version="0.3.16" />
+    <PackageReference Include="FUSE-fx.RepositoryContract" Version="0.4.7" />
     <PackageReference Include="Hl7.Fhir.R4" Version="5.5.1" />
     <PackageReference Include="kGEN.Generator" Version="1.5.0.853" />
     <PackageReference Include="KornSW.EntityFrameworkCore.DataAccessFilter" Version="2.0.864" />
@@ -44,10 +44,10 @@
     </PackageReference>
     <PackageReference Include="SmartAmbience" Version="2.1.1" />
     <PackageReference Include="SmartStandards.Essentials" Version="0.5.1" />
-    <PackageReference Include="SmartStandards.Logging" Version="1.2.2" />
+    <PackageReference Include="SmartStandards.Logging" Version="1.2.3" />
     <PackageReference Include="Snowflake44" Version="3.1.0" />
     <PackageReference Include="System.Linq.Dynamic.Core" Version="1.4.5" />
-    <PackageReference Include="UJMW.DynamicClient" Version="3.3.0" />
+    <PackageReference Include="UJMW.DynamicClient" Version="3.3.1" />
   </ItemGroup>
 
   <ItemGroup>

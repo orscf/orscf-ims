@@ -10,8 +10,8 @@ namespace MedicalResearch.IdentityManagement {
     private static Version _Version = typeof(IImsApiInfoService).Assembly.GetName().Version;
     private string _OAuthTokenRequestUrl = "";
 
-    public ApiService(string oAuthTokenRequestUrl) {
-      _OAuthTokenRequestUrl = oAuthTokenRequestUrl;
+    public ApiService() {
+      //_OAuthTokenRequestUrl = oAuthTokenRequestUrl;
     }
 
     public string GetApiVersion() {
@@ -20,7 +20,6 @@ namespace MedicalResearch.IdentityManagement {
 
     public string[] GetCapabilities() {
       return new string[] {
-        ImsCapabilities.ImsApiInfo,
         ImsCapabilities.Pseudonymization,
         ImsCapabilities.AgeEvaluation,
         ImsCapabilities.Unblinding

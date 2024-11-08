@@ -49,6 +49,10 @@ if(!String.IsNullOrWhiteSpace(outputNamespace)) {
 #>
 
 namespace <#=outputNamespace#> {
+
+  public static class ApiVersion {
+    public const string SemanticVersion = "<#= schema.SemanticVersion #>";
+  }
 <#
 }
 

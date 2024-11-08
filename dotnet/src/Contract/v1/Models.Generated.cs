@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MedicalResearch.IdentityManagement.Model {
 
-public class AdditionalSubjectParticipationIdentifier {
+public partial class AdditionalSubjectParticipationIdentifier {
 
   /// <summary> *this field has a max length of 50 </summary>
   [FixedAfterCreation, MaxLength(50), Required]
@@ -23,7 +23,7 @@ public class AdditionalSubjectParticipationIdentifier {
 
 }
 
-public class SubjectParticipation {
+public partial class SubjectParticipation {
 
   /// <summary> pseudonym of the patient which can be a randomization or screening number (the exact semantic is defined per study) *this field has a max length of 50 </summary>
   [MaxLength(50), Required]
@@ -43,7 +43,7 @@ public class SubjectParticipation {
 
 }
 
-public class StudyExecutionScope {
+public partial class StudyExecutionScope {
 
   /// <summary> a global unique id of a concrete study execution (dedicated to a concrete institute) which is usually originated at the primary CRF or study management system ('SMS') </summary>
   [Required]
@@ -58,7 +58,7 @@ public class StudyExecutionScope {
 
 }
 
-public class StudyScope {
+public partial class StudyScope {
 
   /// <summary> the official invariant name of the study as given by the sponsor </summary>
   [FixedAfterCreation, Required]
@@ -78,7 +78,7 @@ public class StudyScope {
 
 }
 
-public class SubjectAddress {
+public partial class SubjectAddress {
 
   [Required]
   public Guid InternalRecordId { get; set; } = Guid.NewGuid();
@@ -106,7 +106,7 @@ public class SubjectAddress {
 
 }
 
-public class SubjectIdentity {
+public partial class SubjectIdentity {
 
   [Required]
   public Guid RecordId { get; set; } = Guid.NewGuid();

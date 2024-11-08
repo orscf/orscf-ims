@@ -37,55 +37,21 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
 
       services.AddLogging();
 
-      _ApiVersion = typeof(StudyScope).Assembly.GetName().Version;
+      _ApiVersion = Version.Parse(ApiVersion.SemanticVersion);
 
       IdentityManagementDbContext.Migrate();
 
       string outDir = AppDomain.CurrentDomain.BaseDirectory;
 
-      //services.AddSingleton<IAdditionalSubjectParticipationIdentifiers, AdditionalSubjectParticipationIdentifierStore>();
-      //services.AddSingleton<ISubjectParticipations, SubjectParticipationStore>();
-      //services.AddSingleton<IStudyExecutionScopes, StudyExecutionScopeStore>();
-      //services.AddSingleton<IStudyScopes, StudyScopeStore>();
-      //services.AddSingleton<ISubjectAddresses, SubjectAddressStore>();
-      //services.AddSingleton<ISubjectIdentities, SubjectIdentityStore>();
-
-      var apiService = new ApiService(
-        _Configuration.GetValue<string>("OAuthTokenRequestUrl")
-      );
-      services.AddSingleton<IImsApiInfoService>(apiService);
-      services.AddSingleton<IAgeEvaluationService>(apiService);
-      services.AddSingleton<IPseudonymizationService>(apiService);
-      services.AddSingleton<IUnblindingService>(apiService);
-      services.AddSingleton<IUnblindingClearanceAwaiterService>(apiService);
-      services.AddSingleton<IUnblindingClearanceGrantingService>(apiService);
-
-      services.AddSingleton<IAdditionalSubjectParticipationIdentifierStore>(new AdditionalSubjectParticipationIdentifierStore());
-      services.AddSingleton<ISubjectParticipationStore>(new SubjectParticipationStore());
-      services.AddSingleton<IStudyExecutionScopeStore>(new StudyExecutionScopeStore());
-      services.AddSingleton<IStudyScopeStore>(new StudyScopeStore());
-      services.AddSingleton<ISubjectAddressStore>(new SubjectAddressStore());
-      services.AddSingleton<ISubjectIdentityStore>(new SubjectIdentityStore());
-
-      //...
+      ImsShowcaseEndpointFactory.GetFactoryMethodsPerEndpoint((contractType, factory) => {
+        services.AddSingleton(contractType, (s) => factory());
+      });
 
       services.AddDynamicUjmwControllers(
-        (c) => {
-
-          c.AddControllerFor<IImsApiInfoService>("ims/v2/ImsApiInfo");
-          c.AddControllerFor<IAgeEvaluationService>("ims/v2/AgeEvaluation");
-          c.AddControllerFor<IPseudonymizationService>("ims/v2/Pseudonymization");
-          c.AddControllerFor<IUnblindingService>("ims/v2/Unblinding");
-          c.AddControllerFor<IUnblindingClearanceAwaiterService>("ims/v2/UnblindingClearanceAwaiter");
-          c.AddControllerFor<IUnblindingClearanceGrantingService>("ims/v2/UnblindingClearanceGranting");
-
-          c.AddControllerFor<IAdditionalSubjectParticipationIdentifierStore>("ims/v2/store/AdditionalSubjectParticipationIdentifiers");
-          c.AddControllerFor<ISubjectParticipationStore>("ims/v2/store/SubjectParticipations");
-          c.AddControllerFor<IStudyExecutionScopeStore>("ims/v2/store/StudyExecutionScopes");
-          c.AddControllerFor<IStudyScopeStore>("ims/v2/store/StudyScopes");
-          c.AddControllerFor<ISubjectAddressStore>("ims/v2/store/SubjectAddresss");
-          c.AddControllerFor<ISubjectIdentityStore>("ims/v2/store/SubjectIdentitys");
-
+        (r) => {
+          ImsEndpointRegister.GetContractsPerEndpoint((contractType, subroute) => {
+            r.AddControllerFor(contractType, "ims/v2/" + subroute);
+          });
         }
       );
 
@@ -97,6 +63,7 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Contract.xml", true);
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Service.xml", true);
         c.IncludeXmlComments(outDir + "ORSCF.IdentityManagement.Service.WebAPI.xml", true);
+        c.IncludeXmlComments(outDir + "FUSE-fx.RepositoryContract.xml", true);
 
         #region bearer
 
@@ -145,7 +112,7 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
         //);
 
         c.SwaggerDoc(
-          "ApiV1",
+          "ApiV" + _ApiVersion.ToString(1),
           new OpenApiInfo {
             Title = _ApiTitle + "-API",
             Version = _ApiVersion.ToString(3),
@@ -182,7 +149,7 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
 
         app.UseSwagger(o => {
           //warning: needs subfolder! jsons cant be within same dir as swaggerui (below)
-          o.RouteTemplate = "docs/schema/{documentName}.{json|yaml}";
+          o.RouteTemplate = "docs/schema/{documentName}.swagger.{json|yaml}";
           //o.SerializeAsV2 = true;
         });
 
@@ -196,8 +163,7 @@ namespace MedicalResearch.IdentityManagement.WebAPI {
           c.DocumentTitle = _ApiTitle + " - OpenAPI Definition(s)";
 
           //represents the sorting in SwaggerUI combo-box
-          c.SwaggerEndpoint("schema/ApiV1.json", _ApiTitle + "-API v" + _ApiVersion.ToString(3));
-          c.SwaggerEndpoint("schema/StoreAccessV1.json", _ApiTitle + "-StoreAccess v" + _ApiVersion.ToString(3));
+          c.SwaggerEndpoint($"schema/ApiV{_ApiVersion.ToString(1)}.swagger.json", $"{_ApiTitle}-API v{_ApiVersion.ToString(3)}");
 
           c.RoutePrefix = "docs";
 
